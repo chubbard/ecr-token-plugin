@@ -1,0 +1,56 @@
+plugins {
+    id 'java-gradle-plugin'
+    id 'groovy'
+}
+
+//wrapper {
+//    gradleVersion = "5.6.4"
+//}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "com.amazonaws:aws-java-sdk-ecr:1.12.43"
+
+    testImplementation 'org.spockframework:spock-core:2.3-groovy-2.5'
+    testImplementation gradleTestKit()
+}
+
+gradlePlugin {
+    // Define the plugin
+    plugins {
+        ecrToken {
+            id = 'com.fuseanalytics.gradle.ecrToken'
+            implementationClass = 'com.fuseanalytics.aws.ecr.EcrTokenPlugin'
+        }
+    }
+}
+
+// Add a source set for the functional test suite
+sourceSets {
+    functionalTest {
+    }
+}
+
+configurations.functionalTestImplementation.extendsFrom(configurations.testImplementation)
+
+// Add a task to run the functional tests
+tasks.register('functionalTest', Test) {
+    testClassesDirs = sourceSets.functionalTest.output.classesDirs
+    classpath = sourceSets.functionalTest.runtimeClasspath
+    useJUnitPlatform()
+}
+
+gradlePlugin.testSourceSets(sourceSets.functionalTest)
+
+tasks.named('check') {
+    // Run the functional tests as part of `check`
+    dependsOn(tasks.functionalTest)
+}
+
+tasks.named('test') {
+    // Use JUnit Jupiter for unit tests.
+    useJUnitPlatform()
+}
