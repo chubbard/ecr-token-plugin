@@ -28,6 +28,33 @@ gradlePlugin {
     }
 }
 
+pluginBundle {
+    website = "https://github.com/chubbard/ecr-token-plugin"
+    vcsUrl = "https://github.com/chubbard/ecr-token-plugin.git"
+    description = """
+        This gradle plugin is a 100% portable solution for generating an AWS ECR 
+        (Elastic Container Repository) token that can be used to authenticate your 
+        build with ECR.  For example, use this plugin with the Jib plugin to enable
+        painless container build process that has no external dependencies or 
+        complex setup.  Allowing you to setup a Jib container build with AWS ECR in 
+        minutes.
+    """
+
+    mavenCoordinates {
+        groupId = project.group
+        artifactId = project.name
+        version = project.version
+    }
+
+    plugins {
+        ecrToken {
+            displayName = 'AWS ECR Token Plugin'
+            tags = ['aws', 'ecr', 'docker']
+        }
+    }
+}
+
+
 // Add a source set for the functional test suite
 sourceSets {
     functionalTest {
