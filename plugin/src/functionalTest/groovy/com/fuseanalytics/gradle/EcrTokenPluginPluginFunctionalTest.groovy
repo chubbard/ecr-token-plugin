@@ -3,6 +3,8 @@
  */
 package com.fuseanalytics.gradle
 
+import org.gradle.testkit.runner.BuildResult
+import org.gradle.testkit.runner.TaskOutcome
 import spock.lang.Specification
 import spock.lang.TempDir
 import org.gradle.testkit.runner.GradleRunner
@@ -22,24 +24,34 @@ class EcrTokenPluginPluginFunctionalTest extends Specification {
         new File(projectDir, "settings.gradle")
     }
 
-    def "can run task"() {
+    def "can token be used"() {
         given:
         settingsFile << ""
         buildFile << """
+import com.fuseanalytics.aws.ecr.EcrToken
+
 plugins {
     id('com.fuseanalytics.gradle.ecrToken')
+}
+
+task useToken {
+    EcrToken token = ecrToken.get()
+    println( "User=\${token.user} and Password=\${token.password.length()}" )
 }
 """
 
         when:
-        def runner = GradleRunner.create()
+        GradleRunner runner = GradleRunner.create()
         runner.forwardOutput()
         runner.withPluginClasspath()
-        runner.withArguments("greeting")
+        runner.withArguments("useToken")
         runner.withProjectDir(projectDir)
-        def result = runner.build()
+        BuildResult result = runner.build()
 
         then:
-        result.output.contains("Hello from plugin 'com.fuseanalytics.gradle.greeting'")
+        result.output.readLines()
+                .find { it.startsWith("User")}
+                .trim()
+                .matches(/User=(\w+) and Password=(\d+)/)
     }
 }
