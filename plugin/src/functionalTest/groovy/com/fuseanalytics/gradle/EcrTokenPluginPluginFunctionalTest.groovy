@@ -27,7 +27,7 @@ class EcrTokenPluginPluginFunctionalTest extends Specification {
         settingsFile << ""
         buildFile << """
 plugins {
-    id('com.fuseanalytics.gradle.greeting')
+    id('com.fuseanalytics.gradle.ecrToken')
 }
 """
 

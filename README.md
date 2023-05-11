@@ -11,7 +11,7 @@ to create docker containers within your gradle build without needing external de
 
 ```
 apply {
-    id "com.fuseanalytics.gradle.aws.EcrTokenPlugin"
+    id "com.fuseanalytics.gradle.ecrToken"
 }
 
 jib {

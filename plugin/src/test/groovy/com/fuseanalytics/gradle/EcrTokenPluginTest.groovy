@@ -3,22 +3,23 @@
  */
 package com.fuseanalytics.gradle
 
+import com.fuseanalytics.aws.ecr.EcrToken
 import org.gradle.testfixtures.ProjectBuilder
-import org.gradle.api.Project
 import spock.lang.Specification
 
-/**
- * A simple unit test for the 'com.fuseanalytics.gradle.greeting' plugin.
- */
 class EcrTokenPluginTest extends Specification {
     def "plugin registers task"() {
         given:
         def project = ProjectBuilder.builder().build()
 
         when:
-        project.plugins.apply("com.fuseanalytics.gradle.greeting")
+        project.plugins.apply("com.fuseanalytics.gradle.ecrToken")
 
         then:
-        project.tasks.findByName("greeting") != null
+        project.hasProperty("ecrToken")
+        EcrToken token = project.getProperties()["ecrToken"]?.get()
+        assert token != null
+        assert token.getUser() != null
+        assert token.getPassword() != null
     }
 }
