@@ -1,11 +1,16 @@
 plugins {
     id 'java-gradle-plugin'
     id 'groovy'
+    id 'com.gradle.plugin-publish' version '0.21.0'
+    id 'idea'
 }
 
 //wrapper {
 //    gradleVersion = "5.6.4"
 //}
+
+group = "com.fuseanalytics"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -42,7 +47,7 @@ pluginBundle {
 
     mavenCoordinates {
         groupId = project.group
-        artifactId = project.name
+        artifactId = project.rootProject.name
         version = project.version
     }
 
@@ -53,6 +58,11 @@ pluginBundle {
         }
     }
 }
+
+//jar {
+//    archiveBaseName = project.rootProject.name
+//}
+
 
 
 // Add a source set for the functional test suite
