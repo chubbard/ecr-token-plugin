@@ -8,6 +8,13 @@ import java.text.SimpleDateFormat
 
 public class EcrTokenService {
 
+    private final File awsDir;
+
+    public EcrTokenService() {
+        awsDir = new File("${System.getProperty("user.home")}/.aws/")
+        awsDir.mkdirs()
+    }
+
     private List<AuthorizationData> cacheTokens(File tokenFile, List<AuthorizationData> tokens) {
         tokenFile.withWriter { Writer writer ->
             writer.write( JsonOutput.toJson( tokens ) )
@@ -22,7 +29,7 @@ public class EcrTokenService {
     }
 
     EcrToken getEcrToken() {
-        File cachedToken = new File("${System.getProperty("user.home")}/.aws/cache-token.json")
+        File cachedToken = new File(awsDir, "cache-token.json")
         if( cachedToken.exists() ) {
             def json = new JsonSlurper().parseText( cachedToken.text )
             json.each { Map j -> j.expiresAt = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ").parse(j.expiresAt as String) }
