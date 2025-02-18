@@ -10,7 +10,7 @@ import spock.lang.TempDir
 import org.gradle.testkit.runner.GradleRunner
 
 /**
- * A simple functional test for the 'com.fuseanalytics.gradle.greeting' plugin.
+ * A simple functional test for the 'com.fuseanalytics.gradle.ecrToken' plugin.
  */
 class EcrTokenPluginPluginFunctionalTest extends Specification {
     @TempDir
@@ -44,7 +44,7 @@ task useToken {
         GradleRunner runner = GradleRunner.create()
         runner.forwardOutput()
         runner.withPluginClasspath()
-        runner.withArguments("useToken")
+        runner.withArguments("useToken", "--stacktrace")
         runner.withProjectDir(projectDir)
         BuildResult result = runner.build()
 
